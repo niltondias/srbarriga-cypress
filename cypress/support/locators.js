@@ -6,6 +6,7 @@ const locators = {
     },
 
     MENU: {
+        HOME: '[data-test=menu-home]',
         SETTINGS: '[data-test=menu-settings]',
         CONTAS: '[href="/contas"]',
         RESET: '[href="/reset"]',
@@ -16,20 +17,25 @@ const locators = {
     CONTAS: {
         NOME: '[data-test=nome]',
         BTN_SALVAR: '.btn',
-        XP_BTN_ALTERAR: "//td[contains(.,'Conta Bradesco')]/following-sibling::td/i[@class='far fa-edit']"
+        FN_XP_BTN_ALTERAR: nome => `//td[contains(.,'${nome}')]/following-sibling::td/i[@class='far fa-edit']`
     },
 
     MOVIMENTACAO: {
         DESCRICAO: '#descricao',
         VALOR: '[data-test=valor]',
         INTERESSADO: '#envolvido',
+        STATUS: '[data-test=status]',
         BTN_SALVAR: '.btn-primary',
         XP_CONTA: '//select'
     },
 
     EXTRATO: {
         LINHAS: '.list-group > li',
-        XP_BUSCA_ELEMENTO: "//span[contains(.,'Saldo inicial')]/following-sibling::small[contains(.,'1.500')]"
+        FN_XP_BUSCA_ELEMENTO: (desc, valor) => `//span[contains(.,'${desc}')]/following-sibling::small[contains(.,'${valor}')]`
+    },
+
+    SALDO: {
+        FN_XP_SALDO_CONTA: nome => `//td[contains(.,'${nome}')]/following-sibling::td`
     },
 
     MESSAGE: '.toast-message',

@@ -29,7 +29,7 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 		cy.acessarMenuContas()
 
 		// Clicar no botão alterar conta
-		cy.xpath(loc.CONTAS.XP_BTN_ALTERAR).click()
+		cy.xpath(loc.CONTAS.FN_XP_BTN_ALTERAR('Conta Bradesco')).click()
 
 		// Digitar novo nome da conta
 		cy.get(loc.CONTAS.NOME)
@@ -71,7 +71,11 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 		// Interessado / envolvido
 		cy.get(loc.MOVIMENTACAO.INTERESSADO).type('Eu mesmo')
 
+		// Selecionar a conta
 		cy.xpath(loc.MOVIMENTACAO.XP_CONTA).select('Conta Itau')
+
+		// Marcar o status como compensado
+		cy.get(loc.MOVIMENTACAO.STATUS).click()
 
 		// Clicar no botão para salvar o movimento
 		cy.get(loc.MOVIMENTACAO.BTN_SALVAR).click()
@@ -86,28 +90,28 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 		cy.get(loc.EXTRATO.LINHAS).should('have.length', 7)
 
 		// Localizando o movimento na lista validando descrição e valor
-		cy.xpath(loc.EXTRATO.XP_BUSCA_ELEMENTO).should('exist')
-
+		cy.xpath(loc.EXTRATO.FN_XP_BUSCA_ELEMENTO('Saldo inicial', '1.500,00')).should('exist')
 
 	})
 
-	it.skip('Calcular saldo da conta', () => {
+	it('Calcular saldo da conta', () => {
 
-		// Clicar no link de saldo das contas
-		cy.get(':nth-child(1) > .nav-link > .fas').click()
+		// Clicando no botão que abre exibe as movimentações
+		cy.get(loc.MENU.HOME).click()
 
-		// Localizando o registro da conta e validando o saldo
-		cy.xpath("//td[contains(.,'Conta Itau')]/following-sibling::td").should('contain', '1.500,00')
+		// CLicando no botão para excluir a movimentação
+		cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta Itau')).should('contain', '1.500,00')
 
 	})
 
 	it.skip('Excluindo a movimentação', () => {
 
 		// Clicando no botão que abre exibe as movimentações
-		cy.get(':nth-child(3) > .nav-link > .fas').click()
+		cy.get(loc.MENU.HOME).click()
+		// cy.get(':nth-child(3) > .nav-link > .fas').click()
 
 		// CLicando no botão para excluir a movimentação
-		cy.get(':nth-child(3) > .nav-link > .fas').click()
+		cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA).should('exist')
 
 		//Validando a mensagem de exclusão do movimento com sucesso
 		cy.get('.toast-message').should('contain', 'Movimentação inserida com sucesso!')
