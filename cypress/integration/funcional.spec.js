@@ -5,18 +5,22 @@ import loc from '../support/locators'
 describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	before(() => {
-		cy.visit('http://barrigareact.wcaquino.me')
+		// cy.visit('http://barrigareact.wcaquino.me')
 
-		// Informar o com o email
-		cy.get(loc.LOGIN.USER).type('nilton.dias@email.com')
+		// // Informar o com o email
+		// cy.get(loc.LOGIN.USER).type('nilton.dias@email.com')
 
-		// Informar a senha
-		cy.get(loc.LOGIN.PASSWORD).type('1234')
+		// // Informar a senha
+		// cy.get(loc.LOGIN.PASSWORD).type('1234')
 
-		// Clicar no botão entrar
-		cy.get(loc.LOGIN.BTN_LOGIN).click()
+		// // Clicar no botão entrar
+		// cy.get(loc.LOGIN.BTN_LOGIN).click()
 
-		cy.get(loc.MESSAGE).should('contain', 'Bem vindo')
+		// cy.get(loc.MESSAGE).should('contain', 'Bem vindo')
+
+		// Logando no usuário
+		cy.login('nilton.dias@email.com', '1234')
+		cy.resetApp('')
 
 	})
 
@@ -63,7 +67,7 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it('Incluir conta repetida e valiar mensagem', () => {
+	it.skip('Incluir conta repetida e valiar mensagem', () => {
 
 		// Clicar em configurações
 		cy.get('[data-test=menu-settings]').click()
@@ -82,7 +86,7 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it('Inserir movimentação com sucesso', () => {
+	it.skip('Inserir movimentação com sucesso', () => {
 
 		// Clicar em movimentações
 		cy.get(':nth-child(2) > .nav-link > .fas').click()
@@ -113,7 +117,7 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it('Calcular saldo da conta', () => {
+	it.skip('Calcular saldo da conta', () => {
 
 		// Clicar no link de saldo das contas
 		cy.get(':nth-child(1) > .nav-link > .fas').click()
@@ -123,7 +127,7 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it('Excluindo a movimentação', () => {
+	it.skip('Excluindo a movimentação', () => {
 
 		// Clicando no botão que abre exibe as movimentações
 		cy.get(':nth-child(3) > .nav-link > .fas').click()
