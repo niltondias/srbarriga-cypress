@@ -44,59 +44,50 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it('Incluir conta repetida e valiar mensagem', () => {
+	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
 
 		// Acessar o menu contas
 		cy.acessarMenuContas()
 
-		// // Clicar em configurações
-		// cy.get('[data-test=menu-settings]').click()
-
-		// // Clicar em contas
-		// cy.contains('Contas').click()
-
 		// Preencher o nome da conta
 		cy.inserirConta('Conta Itau')
 
-		// cy.get('[data-test=nome]').type('Conta Itau')
-
-		// Clicar no botão para salvar a conta
-		// cy.get('.btn').click()
-
 		// Assertiva verificando a mensagem de sucesso
 		cy.get(loc.MESSAGE).should('contain', 'code 400')
-		// cy.get('.toast-message').should('contain', '400')
 
 	})
 
-	it.skip('Inserir movimentação com sucesso', () => {
+	it('Inserir movimentação com sucesso', () => {
 
-		// Clicar em movimentações
-		cy.get(':nth-child(2) > .nav-link > .fas').click()
+		// Clicar no menu movimentações
+		cy.get(loc.MENU.MOVIMENTACAO).click()
 
 		// Descrição da movientação
-		cy.get('#descricao').type('Saldo inicial')
+		cy.get(loc.MOVIMENTACAO.DESCRICAO).type('Saldo inicial')
 
 		// Valor do movimento
-		cy.get('.col-4 > .form-control').type('1500')
+		cy.get(loc.MOVIMENTACAO.VALOR).type('1500')
 
 		// Interessado / envolvido
-		cy.get('#envolvido').type('Eu mesmo')
+		cy.get(loc.MOVIMENTACAO.INTERESSADO).type('Eu mesmo')
 
-		// Conta corrente ( Select )
-		let conta
-
-		cy.xpath("//select/option[contains(.,'Conta Itau')]").then($el => {
-			conta = $el.val();
-		})
-
-		cy.xpath("//select").select(conta)
-
-		// CLicar no botão para trocar o tipo para receita
-		cy.get('.col-2 > .btn').click()
+		cy.xpath(loc.MOVIMENTACAO.XP_CONTA).select('Conta Itau')
 
 		// Clicar no botão para salvar o movimento
-		cy.get('.btn-primary').click()
+		cy.get(loc.MOVIMENTACAO.BTN_SALVAR).click()
+
+		cy.get(loc.MESSAGE).should('contain', 'Movimentação inserida com sucesso!')
+
+		// Clicar no menu movimentação para validar quantidade de regitros
+		cy.get(loc.MENU.EXTRATO).click()
+
+		// Assertiva veriificando se a lista possui 7 elementos
+		// Isso indica que a nova movimentação foi incluída
+		cy.get(loc.EXTRATO.LINHAS).should('have.length', 7)
+
+		// Localizando o movimento na lista validando descrição e valor
+		cy.xpath(loc.EXTRATO.XP_BUSCA_ELEMENTO).should('exist')
+
 
 	})
 
