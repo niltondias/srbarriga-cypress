@@ -21,10 +21,10 @@
 4. Inserir movimentação - ok
 	Lançar uma despesa
 
-5. Cálculo de saldo
+5. Cálculo de saldo - ok
 	Validar se o saldo da conta foi calculado corretamente
 
-6. Remover movimentação
+6. Remover movimentação - ok
 	Na tela de históricos remover a movimentação 
 	e validar a mensagem
 

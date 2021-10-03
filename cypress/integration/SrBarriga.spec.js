@@ -95,6 +95,28 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 		// Clicar no botão para salvar o movimento
 		cy.get('.btn-primary').click()
 
+	})
+
+	it('Calcular saldo da conta', () => {
+
+		// Clicar no link de saldo das contas
+		cy.get(':nth-child(1) > .nav-link > .fas').click()
+
+		// Localizando o registro da conta e validando o saldo
+		cy.xpath("//td[contains(.,'Conta Itau')]/following-sibling::td").should('contain', '1.500,00')
+
+	})
+
+	it('Excluindo a movimentação', () => {
+
+		// Clicando no botão que abre exibe as movimentações
+		cy.get(':nth-child(3) > .nav-link > .fas').click()
+
+		// CLicando no botão para excluir a movimentação
+		cy.get(':nth-child(3) > .nav-link > .fas').click()
+
+		//Validando a mensagem de exclusão do movimento com sucesso
+		cy.get('.toast-message').should('contain', 'Movimentação inserida com sucesso!')
 
 	})
 
