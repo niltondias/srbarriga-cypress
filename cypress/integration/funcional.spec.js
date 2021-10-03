@@ -44,22 +44,28 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it.skip('Incluir conta repetida e valiar mensagem', () => {
+	it('Incluir conta repetida e valiar mensagem', () => {
 
-		// Clicar em configurações
-		cy.get('[data-test=menu-settings]').click()
+		// Acessar o menu contas
+		cy.acessarMenuContas()
 
-		// Clicar em contas
-		cy.contains('Contas').click()
+		// // Clicar em configurações
+		// cy.get('[data-test=menu-settings]').click()
+
+		// // Clicar em contas
+		// cy.contains('Contas').click()
 
 		// Preencher o nome da conta
-		cy.get('[data-test=nome]').type('Conta Itau')
+		cy.inserirConta('Conta Itau')
+
+		// cy.get('[data-test=nome]').type('Conta Itau')
 
 		// Clicar no botão para salvar a conta
-		cy.get('.btn').click()
+		// cy.get('.btn').click()
 
 		// Assertiva verificando a mensagem de sucesso
-		cy.get('.toast-message').should('contain', '400')
+		cy.get(loc.MESSAGE).should('contain', 'code 400')
+		// cy.get('.toast-message').should('contain', '400')
 
 	})
 
