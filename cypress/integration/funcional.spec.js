@@ -1,55 +1,32 @@
 /// <reference types="cypress" />
 
 import loc from '../support/locators'
+import '../support/commandsContas'
 
 describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	before(() => {
-		// cy.visit('http://barrigareact.wcaquino.me')
-
-		// // Informar o com o email
-		// cy.get(loc.LOGIN.USER).type('nilton.dias@email.com')
-
-		// // Informar a senha
-		// cy.get(loc.LOGIN.PASSWORD).type('1234')
-
-		// // Clicar no botão entrar
-		// cy.get(loc.LOGIN.BTN_LOGIN).click()
-
-		// cy.get(loc.MESSAGE).should('contain', 'Bem vindo')
-
-		// Logando no usuário
 		cy.login('nilton.dias@email.com', '1234')
-		cy.resetApp('')
+		cy.resetApp()
 
 	})
 
 	it('Incluir uma conta com sucesso', () => {
 
-		// Clicar em configurações
-		cy.get(loc.MENU.SETTINGS).click()
+		// Acessar o menu
+		cy.acessarMenuContas()
 
-		// Clicar em contas
-		cy.get(loc.MENU.CONTAS).click()
-
-		// Preencher o nome da conta
-		cy.get(loc.CONTAS.NOME).type('Conta Bradesco')
-
-		// Clicar no botão para salvar a conta
-		cy.get(loc.CONTAS.BTN_SALVAR).click()
+		// Inserir uma conta
+		cy.inserirConta('Conta Bradesco')
 
 		// Assertiva verificando a mensagem de sucesso
 		cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso!')
-
 	})
 
 	it('Alterar conta com sucesso ', () => {
 
-		// Clicar em configurações
-		cy.get(loc.MENU.SETTINGS).click()
-
-		// Clicar em contas
-		cy.get(loc.MENU.CONTAS).click()
+		// Acessar o menu
+		cy.acessarMenuContas()
 
 		// Clicar no botão alterar conta
 		cy.xpath(loc.CONTAS.XP_BTN_ALTERAR).click()
