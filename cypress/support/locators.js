@@ -29,9 +29,13 @@ const locators = {
         XP_CONTA: '//select'
     },
 
+    // [@class='far fa-trash-alt']
+
     EXTRATO: {
         LINHAS: '.list-group > li',
-        FN_XP_BUSCA_ELEMENTO: (desc, valor) => `//span[contains(.,'${desc}')]/following-sibling::small[contains(.,'${valor}')]`
+        FN_XP_BUSCA_ELEMENTO: (desc, valor) => `//span[contains(.,'${desc}')]/following-sibling::small[contains(.,'${valor}')]`,
+        FN_XP_BTN_EXCLUIR: desc => `//span[contains(.,'${desc}')]/../../..//i[@class='far fa-trash-alt']`
+        //                                   `//span[contains(.,'${desc}')]/../../..//i[@class='far fa-trash-alt']`
     },
 
     SALDO: {

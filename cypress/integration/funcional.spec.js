@@ -3,7 +3,7 @@
 import loc from '../support/locators'
 import '../support/commandsContas'
 
-describe('Desafio SrBarriga React - Casos de testes', () => {
+describe('Desafio SrBarriga React - Testes funcionais', () => {
 
 	before(() => {
 		cy.login('nilton.dias@email.com', '1234')
@@ -104,17 +104,16 @@ describe('Desafio SrBarriga React - Casos de testes', () => {
 
 	})
 
-	it.skip('Excluindo a movimentação', () => {
+	it('Excluindo a movimentação com sucesso', () => {
 
 		// Clicando no botão que abre exibe as movimentações
-		cy.get(loc.MENU.HOME).click()
-		// cy.get(':nth-child(3) > .nav-link > .fas').click()
+		cy.get(loc.MENU.EXTRATO).click()
 
 		// CLicando no botão para excluir a movimentação
-		cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA).should('exist')
+		cy.xpath(loc.EXTRATO.FN_XP_BTN_EXCLUIR('Saldo inicial')).click()
 
 		//Validando a mensagem de exclusão do movimento com sucesso
-		cy.get('.toast-message').should('contain', 'Movimentação inserida com sucesso!')
+		cy.get('.toast-message').should('contain', 'sucesso')
 
 	})
 
