@@ -22,6 +22,26 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 				senha: "1234"
 			}
 		}).its('body.token').should('not.be.empty')
+			.then(token => {
+				cy.request({
+					url: 'https://barrigarest.wcaquino.me/contas',
+					method: 'POST',
+					headers: {
+						Authorization: `JWT ${token}`
+					},
+					body: {
+						nome: 'Conta incluida com rest'
+					}
+				}).as('response')
+			})
+
+		cy.get('@response').then(res => {
+
+			expect(res.status).to.be.equals(201)
+			expect(res.body).have.property('id')
+			expect(res.body).to.be.property('nome', 'Conta incluida com rest')
+
+		})
 
 	})
 
