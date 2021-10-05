@@ -39,7 +39,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 
 	})
 
-	it.only('Alterar conta com sucesso ', () => {
+	it('Alterar conta com sucesso ', () => {
 		cy.request({
 			method: "GET",
 			url: "/contas",
@@ -67,7 +67,26 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 
 	})
 
-	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
+	it.only('Não deve incluir uma conta repetida e valiar mensagem', () => {
+		cy.request({
+			url: '/contas',
+			method: 'POST',
+			headers: {
+				Authorization: `JWT ${token}`
+			},
+			body: {
+				nome: 'Conta mesmo nome'
+			},
+			failOnStatusCode: false
+		}).as('response')
+
+		cy.get('@response').then(res => {
+
+			expect(res.status).to.be.equals(400)
+			expect(res.body.error).to.be.equal('Já existe uma conta com esse nome!')
+
+		})
+
 
 	})
 
