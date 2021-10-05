@@ -40,34 +40,25 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 	})
 
 	it('Alterar conta com sucesso ', () => {
-		cy.request({
-			method: "GET",
-			url: "/contas",
-			qs: {
-				nome: 'Conta para alterar'
-			},
-			headers: {
-				Authorization: `JWT ${token}`
-			}
-		}).then(res => {
+		cy.getContaByName('Conta para alterar')
+			.then(contaId => {
+				cy.request({
+					url: `/contas/${contaId}`,
+					method: "PUT",
+					headers: {
+						Authorization: `JWT ${token}`
+					},
+					body: {
+						nome: "Conta alterada via rest"
+					}
+				}).as('response')
 
-			cy.request({
-				url: `/contas/${res.body[0].id}`,
-				method: "PUT",
-				headers: {
-					Authorization: `JWT ${token}`
-				},
-				body: {
-					nome: "Conta alterada via rest"
-				}
-			}).as('response')
-
-			cy.get('@response').its('status').should('be.equal', 200)
-		})
+				cy.get('@response').its('status').should('be.equal', 200)
+			})
 
 	})
 
-	it.only('Não deve incluir uma conta repetida e valiar mensagem', () => {
+	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
 		cy.request({
 			url: '/contas',
 			method: 'POST',
@@ -91,6 +82,29 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 	})
 
 	it('Inserir movimentação com sucesso', () => {
+		cy.getContaByName('Conta para movimentacoes').then(contaId => {
+			cy.request({
+				method: 'POST',
+				url: '/transacoes',
+				headers: {
+					Authorization: `JWT ${token}`
+				},
+				body: {
+					conta_id: contaId,
+					data_pagamento: Cypress.moment().add({ days: 1 }).format('DD/MM/YYYY'),
+					data_transacao: Cypress.moment().format('DD/MM/YYYY'),
+					descricao: "Desc",
+					envolvido: "Eu",
+					status: true,
+					tipo: "REC",
+					valor: 123
+				}
+			}).as('response')
+
+		})
+
+		cy.get('@response').its('status').should('be.equal', 201)
+		cy.get('@response').its('body.id').should('exist')
 
 	})
 
