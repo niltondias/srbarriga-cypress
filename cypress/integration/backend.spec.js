@@ -2,31 +2,24 @@
 
 describe('Desafio SrBarriga React - Testes funcionais', () => {
 	let token
+	const usuario = 'nilton.dias@email.com'
+	const senha = '1234'
 
 	before(() => {
-		cy.getToken('nilton.dias@email.com', '1234')
+		cy.getToken(usuario, senha)
 			.then(tkn => {
 				token = tkn
 			})
 	})
 
 	beforeEach(() => {
-		// cy.resetApp()
+		cy.resetRest(token, usuario, senha)
 
 	})
 
 	it('Incluir uma conta com sucesso', () => {
-		// cy.request({
-		// 	method: 'POST',
-		// 	url: 'https://barrigarest.wcaquino.me/signin',
-		// 	body: {
-		// 		email: "nilton.dias@email.com",
-		// 		redirecionar: false,
-		// 		senha: "1234"
-		// 	}
-		// }).its('body.token').should('not.be.empty')
 		cy.request({
-			url: 'https://barrigarest.wcaquino.me/contas',
+			url: '/contas',
 			method: 'POST',
 			headers: {
 				Authorization: `JWT ${token}`
