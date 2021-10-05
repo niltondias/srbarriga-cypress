@@ -1,10 +1,13 @@
 /// <reference types="cypress" />
 
 describe('Desafio SrBarriga React - Testes funcionais', () => {
+	let token
 
 	before(() => {
-		// cy.login('nilton.dias@email.com', '1234')
-
+		cy.getToken('nilton.dias@email.com', '1234')
+			.then(tkn => {
+				token = tkn
+			})
 	})
 
 	beforeEach(() => {
@@ -13,27 +16,25 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 	})
 
 	it('Incluir uma conta com sucesso', () => {
+		// cy.request({
+		// 	method: 'POST',
+		// 	url: 'https://barrigarest.wcaquino.me/signin',
+		// 	body: {
+		// 		email: "nilton.dias@email.com",
+		// 		redirecionar: false,
+		// 		senha: "1234"
+		// 	}
+		// }).its('body.token').should('not.be.empty')
 		cy.request({
+			url: 'https://barrigarest.wcaquino.me/contas',
 			method: 'POST',
-			url: 'https://barrigarest.wcaquino.me/signin',
+			headers: {
+				Authorization: `JWT ${token}`
+			},
 			body: {
-				email: "nilton.dias@email.com",
-				redirecionar: false,
-				senha: "1234"
+				nome: 'Conta incluida com rest'
 			}
-		}).its('body.token').should('not.be.empty')
-			.then(token => {
-				cy.request({
-					url: 'https://barrigarest.wcaquino.me/contas',
-					method: 'POST',
-					headers: {
-						Authorization: `JWT ${token}`
-					},
-					body: {
-						nome: 'Conta incluida com rest'
-					}
-				}).as('response')
-			})
+		}).as('response')
 
 		cy.get('@response').then(res => {
 
