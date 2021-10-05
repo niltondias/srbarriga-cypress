@@ -25,7 +25,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 				Authorization: `JWT ${token}`
 			},
 			body: {
-				nome: 'Conta incluida com rest'
+				nome: 'Conta incluida via rest'
 			}
 		}).as('response')
 
@@ -33,13 +33,37 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 
 			expect(res.status).to.be.equals(201)
 			expect(res.body).have.property('id')
-			expect(res.body).to.be.property('nome', 'Conta incluida com rest')
+			expect(res.body).to.be.property('nome', 'Conta incluida via rest')
 
 		})
 
 	})
 
-	it('Alterar conta com sucesso ', () => {
+	it.only('Alterar conta com sucesso ', () => {
+		cy.request({
+			method: "GET",
+			url: "/contas",
+			qs: {
+				nome: 'Conta para alterar'
+			},
+			headers: {
+				Authorization: `JWT ${token}`
+			}
+		}).then(res => {
+
+			cy.request({
+				url: `/contas/${res.body[0].id}`,
+				method: "PUT",
+				headers: {
+					Authorization: `JWT ${token}`
+				},
+				body: {
+					nome: "Conta alterada via rest"
+				}
+			}).as('response')
+
+			cy.get('@response').its('status').should('be.equal', 200)
+		})
 
 	})
 
