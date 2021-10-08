@@ -5,6 +5,10 @@ import '../support/commandsContas'
 
 describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
+	after(() => {
+		cy.clearLocalStorage()
+	})
+
 	before(() => {
 		//Criando o servidor
 		cy.server()
@@ -41,7 +45,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it('Incluir uma conta com sucesso', () => {
+	it.only('Incluir uma conta com sucesso', () => {
 
 		// Acessar o menu
 		cy.acessarMenuContas()
