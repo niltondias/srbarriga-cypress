@@ -106,7 +106,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 
 	})
 
-	it.only('Calcular saldo da conta', () => {
+	it('Calcular saldo da conta', () => {
 		// Consultando o saldo da conta antes da movimentação
 		cy.request({
 			method: 'GET',
@@ -121,25 +121,20 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 		})
 
 		//Localizando a movimentação a ser alterada
-		cy.request({
-			method: 'GET',
-			url: '/transacoes',
-			headers: { Authorization: `JWT ${token}` },
-			qs: { descricao: 'Movimentacao 1, calculo saldo' }
-		}).then(res => {
+		cy.buscaTransacao('Movimentacao 1, calculo saldo').then(res => {
 			//Efetuando uma movimentação para depois consulta o saldo da conta
 			cy.request({
 				method: 'PUT',
-				url: `/transacoes/${res.body[0].id}`,
+				url: `/transacoes/${res.id}`,
 				headers: { Authorization: `JWT ${token}` },
 				body: {
-					conta_id: res.body[0].conta_id,
-					data_pagamento: Cypress.moment(res.body[0].data_pagamento).format('DD/MM/YYYY'),
-					data_transacao: Cypress.moment(res.body[0].data_transacao).format('DD/MM/YYYY'),
+					conta_id: res.conta_id,
+					data_pagamento: Cypress.moment(res.data_pagamento).format('DD/MM/YYYY'),
+					data_transacao: Cypress.moment(res.data_transacao).format('DD/MM/YYYY'),
 					descricao: "Movimentacao 1, calculo saldo",
-					envolvido: res.body[0].envolvido,
+					envolvido: res.envolvido,
 					status: true,
-					valor: res.body[0].valor
+					valor: res.valor
 				}
 			}).its('status').should('be.equal', 200)
 		})
@@ -158,7 +153,17 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 	})
 
 
-	it('Excluindo a movimentação com sucesso', () => {
+	it.only('Excluindo a movimentação com sucesso', () => {
+		//Localizando a movimentaão a ser excluída
+		cy.buscaTransacao('Movimentacao para exclusao').then(res => {
+			//Deletanto uma movimentação
+			cy.request({
+				method: 'DELETE',
+				url: `/transacoes/${res.id}`,
+				headers: { Authorization: `JWT ${token}` }
+			}).its('status').should('be.equal', 204)
+
+		})
 
 	})
 })

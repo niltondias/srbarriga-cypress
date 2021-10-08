@@ -90,3 +90,17 @@ Cypress.Commands.add('getContaByName', (conta) => {
     })
 
 })
+
+Cypress.Commands.add('buscaTransacao', (desc) => {
+    cy.getToken('nilton.dias@email.com', '1234').then(token => {
+        cy.request({
+            method: 'GET',
+            url: '/transacoes',
+            headers: { Authorization: `JWT ${token}` },
+            qs: { descricao: desc }
+        }).then(res => {
+            return res.body[0]
+
+        })
+    })
+})
