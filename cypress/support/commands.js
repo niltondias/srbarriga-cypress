@@ -58,18 +58,16 @@ Cypress.Commands.add('getToken', (user, passwd) => {
         }
     }).its('body.token').should('not.be.empty')
         .then(token => {
+            Cypress.env('token', token)
             return token
         })
 })
 
-Cypress.Commands.add('resetRest', (token, usuario, senha) => {
+Cypress.Commands.add('resetRest', (usuario, senha) => {
     cy.getToken(usuario, senha).then(() => {
         cy.request({
             url: '/reset',
-            method: 'GET',
-            headers: {
-                Authorization: `JWT ${token}`
-            }
+            method: 'GET'
         }).its('status').should('be.equal', 200)
     })
 })
@@ -104,3 +102,17 @@ Cypress.Commands.add('buscaTransacao', (desc) => {
         })
     })
 })
+
+// Sobrepondo o método request do Cypress
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+    if (options.length === 1) {
+
+        if (Cypress.env('token')) {
+            options[0].headers = { Authorization: `JWT ${Cypress.env('token')}` }
+        }
+    }
+
+    return originalFn(...options)
+})
+
+

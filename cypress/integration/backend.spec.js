@@ -1,19 +1,19 @@
 /// <reference types="cypress" />
 
 describe('Desafio SrBarriga React - Testes funcionais', () => {
-	let token
+	// let token
 	const usuario = 'nilton.dias@email.com'
 	const senha = '1234'
 
 	before(() => {
 		cy.getToken(usuario, senha)
-			.then(tkn => {
-				token = tkn
-			})
+		// .then(tkn => {
+		// 	token = tkn
+		// })
 	})
 
 	beforeEach(() => {
-		cy.resetRest(token, usuario, senha)
+		cy.resetRest(usuario, senha)
 
 	})
 
@@ -21,9 +21,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 		cy.request({
 			url: '/contas',
 			method: 'POST',
-			headers: {
-				Authorization: `JWT ${token}`
-			},
+			// headers: { Authorization: `JWT ${token}` },
 			body: {
 				nome: 'Conta incluida via rest'
 			}
@@ -45,9 +43,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 				cy.request({
 					url: `/contas/${contaId}`,
 					method: "PUT",
-					headers: {
-						Authorization: `JWT ${token}`
-					},
+					// headers: { Authorization: `JWT ${token}` },
 					body: {
 						nome: "Conta alterada via rest"
 					}
@@ -62,9 +58,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 		cy.request({
 			url: '/contas',
 			method: 'POST',
-			headers: {
-				Authorization: `JWT ${token}`
-			},
+			// headers: { Authorization: `JWT ${token}` },
 			body: {
 				nome: 'Conta mesmo nome'
 			},
@@ -86,7 +80,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 			cy.request({
 				method: 'POST',
 				url: '/transacoes',
-				headers: { Authorization: `JWT ${token}` },
+				// headers: { Authorization: `JWT ${token}` },
 				body: {
 					conta_id: contaId,
 					data_pagamento: Cypress.moment().add({ days: 1 }).format('DD/MM/YYYY'),
@@ -111,7 +105,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 		cy.request({
 			method: 'GET',
 			url: '/saldo',
-			headers: { Authorization: `JWT ${token}` }
+			// headers: { Authorization: `JWT ${token}` }
 		}).then(res => {
 			let saldoConta = null
 			res.body.forEach(c => {
@@ -126,7 +120,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 			cy.request({
 				method: 'PUT',
 				url: `/transacoes/${res.id}`,
-				headers: { Authorization: `JWT ${token}` },
+				// headers: { Authorization: `JWT ${token}` },
 				body: {
 					conta_id: res.conta_id,
 					data_pagamento: Cypress.moment(res.data_pagamento).format('DD/MM/YYYY'),
@@ -142,7 +136,7 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 		cy.request({
 			method: 'GET',
 			url: '/saldo',
-			headers: { Authorization: `JWT ${token}` }
+			// headers: { Authorization: `JWT ${token}` }
 		}).then(res => {
 			let saldoConta = null
 			res.body.forEach(c => {
@@ -153,14 +147,14 @@ describe('Desafio SrBarriga React - Testes funcionais', () => {
 	})
 
 
-	it.only('Excluindo a movimentação com sucesso', () => {
+	it('Excluindo a movimentação com sucesso', () => {
 		//Localizando a movimentaão a ser excluída
 		cy.buscaTransacao('Movimentacao para exclusao').then(res => {
 			//Deletanto uma movimentação
 			cy.request({
 				method: 'DELETE',
 				url: `/transacoes/${res.id}`,
-				headers: { Authorization: `JWT ${token}` }
+				// headers: { Authorization: `JWT ${token}` }
 			}).its('status').should('be.equal', 204)
 
 		})
