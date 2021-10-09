@@ -41,17 +41,51 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		}).as('saldo')
 
 		cy.login('nilton.dias@email.com', '1234 Senha errada')
-		cy.resetApp()
+		// cy.resetApp()
 
 	})
 
 	it.only('Incluir uma conta com sucesso', () => {
+		cy.route({
+			method: 'GET',
+			url: '/contas',
+			response: [
+				{ "id": 1, "nome": "Carteira", "visivel": true, "usuario_id": 1 },
+				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
+			]
+		}).as('Contas')
+
+		cy.route({
+			method: 'POST',
+			url: '/contas',
+			response: {
+				"id": 3,
+				"nome": "Conta Bradesco",
+				"visivel": true,
+				"usuario_id": 1
+			}
+		}).as('Incluir conta')
 
 		// Acessar o menu
 		cy.acessarMenuContas()
 
 		// Inserir uma conta
+
+		// Redefinir rota após incluir conta
+		cy.route({
+			method: 'GET',
+			url: '/contas',
+			response: [
+				{ "id": 1, "nome": "Carteira", "visivel": true, "usuario_id": 1 },
+				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
+				{ "id": 3, "nome": "Conta Bradesco", "visivel": true, "usuario_id": 1 }
+			]
+		}).as('ContasSalvas')
+
 		cy.inserirConta('Conta Bradesco')
+
+		// Acessar o menu
+		cy.acessarMenuContas()
 
 		// Assertiva verificando a mensagem de sucesso
 		cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso!')
