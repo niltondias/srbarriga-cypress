@@ -103,7 +103,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it('Inserir movimentação com sucesso', () => {
+	it.only('Inserir movimentação com sucesso', () => {
 
 		// Rota para incluir uma nova transação financeira
 		cy.route({
@@ -130,15 +130,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.route({
 			method: 'GET',
 			url: '/extrato/**',
-			response: [
-				{ "conta": "Conta para movimentacoes", "id": 788803, "descricao": "teste", "envolvido": "eu mesmo", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-11T03:00:00.000Z", "data_pagamento": "2021-10-11T03:00:00.000Z", "valor": "115.00", "status": false, "conta_id": 847985, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta com movimentacao", "id": 787291, "descricao": "Movimentacao de conta", "envolvido": "BBB", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-1500.00", "status": true, "conta_id": 847986, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta para saldo", "id": 787292, "descricao": "Movimentacao 1, calculo saldo", "envolvido": "CCC", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "3500.00", "status": false, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta para saldo", "id": 787293, "descricao": "Movimentacao 2, calculo saldo", "envolvido": "DDD", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-1000.00", "status": true, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta para saldo", "id": 787294, "descricao": "Movimentacao 3, calculo saldo", "envolvido": "EEE", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "1534.00", "status": true, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta para extrato", "id": 787295, "descricao": "Movimentacao para extrato", "envolvido": "FFF", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-220.00", "status": true, "conta_id": 847988, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
-				{ "conta": "Conta para extrato", "id": 787296, "descricao": "Saldo inicial", "envolvido": "FFF", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "1500.00", "status": true, "conta_id": 847988, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null }
-			]
+			response: 'fixture:movimentacaoSalva'
 		}).as('extratoMovIncluida')
 
 		// Clicar no menu movimentações
