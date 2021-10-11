@@ -103,7 +103,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it.only('Inserir movimentação com sucesso', () => {
+	it('Inserir movimentação com sucesso', () => {
 
 		// Rota para incluir uma nova transação financeira
 		cy.route({
@@ -168,13 +168,13 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it('Calcular saldo da conta', () => {
+	it.only('Calcular saldo da conta', () => {
 
 		// Clicando no botão que abre exibe as movimentações
 		cy.get(loc.MENU.HOME).click()
 
 		// CLicando no botão para excluir a movimentação
-		cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta Itau')).should('contain', '1.500,00')
+		cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Carteira')).should('contain', '1.000,00')
 
 	})
 
