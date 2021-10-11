@@ -78,13 +78,20 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.get(loc.MESSAGE).should('contain', 'Conta atualizada com sucesso!')
 	})
 
-	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
+	it.only('Não deve incluir uma conta repetida e valiar mensagem', () => {
+
+		cy.route({
+			method: 'POST',
+			url: '/contas',
+			response: { "error": "Já existe uma conta com esse nome!" },
+			status: 400
+		}).as('saveContaMesmoNome')
 
 		// Acessar o menu contas
 		cy.acessarMenuContas()
 
 		// Preencher o nome da conta
-		cy.inserirConta('Conta Itau')
+		cy.inserirConta('Banco')
 
 		// Assertiva verificando a mensagem de sucesso
 		cy.get(loc.MESSAGE).should('contain', 'code 400')

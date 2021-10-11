@@ -37,17 +37,6 @@ const buildEnv = () => {
         ]
     }).as('Contas')
 
-    cy.route({
-        method: 'POST',
-        url: '/contas',
-        response: {
-            "id": 3,
-            "nome": "Conta Bradesco",
-            "visivel": true,
-            "usuario_id": 1
-        }
-    }).as('Incluir conta')
-
 }
 
 export default buildEnv
