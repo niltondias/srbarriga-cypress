@@ -168,7 +168,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it.only('Calcular saldo da conta', () => {
+	it('Calcular saldo da conta', () => {
 
 		// Clicando no botão que abre exibe as movimentações
 		cy.get(loc.MENU.HOME).click()
@@ -179,6 +179,13 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 	})
 
 	it('Excluindo a movimentação com sucesso', () => {
+
+		cy.route({
+			method: 'DELETE',
+			url: '/transacoes/**',
+			response: {},
+			status: 204
+		}).as('del')
 
 		// Clicando no botão que abre exibe as movimentações
 		cy.get(loc.MENU.EXTRATO).click()
