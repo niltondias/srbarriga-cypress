@@ -22,6 +22,11 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.acessarMenuContas()
 
 		// Inserir uma conta
+		cy.route({
+			method: 'POST',
+			url: '/contas',
+			response: { "id": 3, "nome": "Banco Bradesco", "visivel": true, "usuario_id": 1 }
+		})
 
 		// Redefinir rota após incluir conta
 		cy.route({
@@ -78,7 +83,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.get(loc.MESSAGE).should('contain', 'Conta atualizada com sucesso!')
 	})
 
-	it.only('Não deve incluir uma conta repetida e valiar mensagem', () => {
+	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
 
 		cy.route({
 			method: 'POST',
@@ -100,6 +105,42 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	it('Inserir movimentação com sucesso', () => {
 
+		// Rota para incluir uma nova transação financeira
+		cy.route({
+			method: 'POST',
+			url: '/transacoes',
+			response: {
+				"id": 788803,
+				"descricao": "teste",
+				"envolvido": "eu mesmo",
+				"observacao": null,
+				"tipo": "REC",
+				"data_transacao": "2021-10-11T03:00:00.000Z",
+				"data_pagamento": "2021-10-11T03:00:00.000Z",
+				"valor": "115.00",
+				"status": false,
+				"conta_id": 1,
+				"usuario_id": 1,
+				"transferencia_id": null,
+				"parcelamento_id": null
+			}
+		}).as('novaTransacao')
+
+		// Rota para extrada das transações
+		cy.route({
+			method: 'GET',
+			url: '/extrato/**',
+			response: [
+				{ "conta": "Conta para movimentacoes", "id": 788803, "descricao": "teste", "envolvido": "eu mesmo", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-11T03:00:00.000Z", "data_pagamento": "2021-10-11T03:00:00.000Z", "valor": "115.00", "status": false, "conta_id": 847985, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta com movimentacao", "id": 787291, "descricao": "Movimentacao de conta", "envolvido": "BBB", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-1500.00", "status": true, "conta_id": 847986, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta para saldo", "id": 787292, "descricao": "Movimentacao 1, calculo saldo", "envolvido": "CCC", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "3500.00", "status": false, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta para saldo", "id": 787293, "descricao": "Movimentacao 2, calculo saldo", "envolvido": "DDD", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-1000.00", "status": true, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta para saldo", "id": 787294, "descricao": "Movimentacao 3, calculo saldo", "envolvido": "EEE", "observacao": null, "tipo": "REC", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "1534.00", "status": true, "conta_id": 847987, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta para extrato", "id": 787295, "descricao": "Movimentacao para extrato", "envolvido": "FFF", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "-220.00", "status": true, "conta_id": 847988, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null },
+				{ "conta": "Conta para extrato", "id": 787296, "descricao": "Saldo inicial", "envolvido": "FFF", "observacao": null, "tipo": "DESP", "data_transacao": "2021-10-08T03:00:00.000Z", "data_pagamento": "2021-10-08T03:00:00.000Z", "valor": "1500.00", "status": true, "conta_id": 847988, "usuario_id": 25366, "transferencia_id": null, "parcelamento_id": null }
+			]
+		}).as('extratoMovIncluida')
+
 		// Clicar no menu movimentações
 		cy.get(loc.MENU.MOVIMENTACAO).click()
 
@@ -113,7 +154,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.get(loc.MOVIMENTACAO.INTERESSADO).type('Eu mesmo')
 
 		// Selecionar a conta
-		cy.xpath(loc.MOVIMENTACAO.XP_CONTA).select('Conta Itau')
+		cy.xpath(loc.MOVIMENTACAO.XP_CONTA).select('Banco')
 
 		// Marcar o status como compensado
 		cy.get(loc.MOVIMENTACAO.STATUS).click()
