@@ -2,6 +2,7 @@
 
 import loc from '../support/locators'
 import '../support/commandsContas'
+import buildEnv from '../support/buildEnv'
 
 describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
@@ -9,63 +10,14 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.clearLocalStorage()
 	})
 
-	before(() => {
-		//Criando o servidor
-		cy.server()
-
-		//Criando a rota para o login
-		cy.route({
-			method: 'POST',
-			url: '/signin',
-			response: {
-				id: 1000,
-				nome: 'Usuario fake',
-				toke: 'Um token inválido que na verdade vai funcionar'
-			}
-		}).as('signin')
-
-		//Criando a rota de saldos
-		cy.route({
-			method: 'GET',
-			url: '/saldo',
-			response: [{
-				"conta_id": 999,
-				"conta": "Carteira",
-				"saldo": "1000.00"
-			},
-			{
-				"conta_id": 9909,
-				"conta": "Banco",
-				"saldo": "1000000000.00"
-			}]
-		}).as('saldo')
-
+	beforeEach(() => {
+		buildEnv()
 		cy.login('nilton.dias@email.com', '1234 Senha errada')
 		// cy.resetApp()
 
 	})
 
 	it('Incluir uma conta com sucesso', () => {
-		cy.route({
-			method: 'GET',
-			url: '/contas',
-			response: [
-				{ "id": 1, "nome": "Carteira", "visivel": true, "usuario_id": 1 },
-				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
-			]
-		}).as('Contas')
-
-		cy.route({
-			method: 'POST',
-			url: '/contas',
-			response: {
-				"id": 3,
-				"nome": "Conta Bradesco",
-				"visivel": true,
-				"usuario_id": 1
-			}
-		}).as('Incluir conta')
-
 		// Acessar o menu
 		cy.acessarMenuContas()
 
@@ -91,16 +43,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso!')
 	})
 
-	it.only('Alterar conta com sucesso ', () => {
-		cy.route({
-			method: 'GET',
-			url: '/contas',
-			response: [
-				{ "id": 1, "nome": "Carteira", "visivel": true, "usuario_id": 1 },
-				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
-			]
-		}).as('Contas')
-
+	it('Alterar conta com sucesso ', () => {
 		cy.route({
 			method: 'PUT',
 			url: '/contas/**',
