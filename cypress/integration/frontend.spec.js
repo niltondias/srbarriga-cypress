@@ -45,7 +45,7 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 
 	})
 
-	it.only('Incluir uma conta com sucesso', () => {
+	it('Incluir uma conta com sucesso', () => {
 		cy.route({
 			method: 'GET',
 			url: '/contas',
@@ -91,25 +91,48 @@ describe('Desafio SrBarriga React - Testes FrontEnd', () => {
 		cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso!')
 	})
 
-	it('Alterar conta com sucesso ', () => {
+	it.only('Alterar conta com sucesso ', () => {
+		cy.route({
+			method: 'GET',
+			url: '/contas',
+			response: [
+				{ "id": 1, "nome": "Carteira", "visivel": true, "usuario_id": 1 },
+				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
+			]
+		}).as('Contas')
+
+		cy.route({
+			method: 'PUT',
+			url: '/contas/**',
+			response: { "id": 1, "nome": "Carteira Alterada", "visivel": true, "usuario_id": 1 }
+		})
 
 		// Acessar o menu
 		cy.acessarMenuContas()
 
 		// Clicar no botão alterar conta
-		cy.xpath(loc.CONTAS.FN_XP_BTN_ALTERAR('Conta Bradesco')).click()
+		cy.xpath(loc.CONTAS.FN_XP_BTN_ALTERAR('Carteira')).click()
 
 		// Digitar novo nome da conta
 		cy.get(loc.CONTAS.NOME)
 			.clear()
-			.type('Conta Itau')
+			.type('Carteira alterada')
+
+		// Redefinir a rota para refletir a alteração da conta
+		cy.route({
+			method: 'GET',
+			url: '/contas',
+			response: [
+				{ "id": 1, "nome": "Carteira Alterada", "visivel": true, "usuario_id": 1 },
+				{ "id": 2, "nome": "Banco", "visivel": true, "usuario_id": 1 },
+			]
+		}).as('ContaAlterda')
 
 		// Clicar no botão para salvar a conta
 		cy.get(loc.CONTAS.BTN_SALVAR).click()
 
 		// Assertiva verificando a mensagem de sucesso
 		cy.get(loc.MESSAGE).should('contain', 'Conta atualizada com sucesso!')
-
 	})
 
 	it('Não deve incluir uma conta repetida e valiar mensagem', () => {
